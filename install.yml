@@ -1,0 +1,28 @@
+- hosts: my_servers
+  become: yes
+  tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Install MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Start and Enable Nginx
+      systemd:
+        name: nginx
+        enabled: yes
+        state: started
+
+    - name: Start and Enable MySQL
+      systemd:
+        name: mysql
+        enabled: yes
+        state: started

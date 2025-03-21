@@ -1,0 +1,15 @@
+---
+- name: Test Connectivity
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ping all servers
+      ping:
+      register: ping_result
+
+    - name: Log ping results
+      local_action:
+        module: copy
+        content: "{{ inventory_hostname }}: {{ ping_result.ping }}\n"
+        dest: ./ping_log.txt
+      delegate_to: localhost

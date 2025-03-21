@@ -1,0 +1,19 @@
+---
+- name: Verify Users Exist
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Check if users exist
+      command: "id {{ item }}"
+      with_items:
+        - deploy
+        - devops
+        - admin
+      register: user_check
+      ignore_errors: yes
+
+    - name: Assert users exist
+      assert:
+        that: item.rc == 0
+        fail_msg: "User {{ item.item }} does not exist!"
+      with_items: "{{ user_check.results }}"

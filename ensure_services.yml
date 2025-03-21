@@ -1,0 +1,12 @@
+---
+- name: Ensure Essential Services are Running
+  hosts: all
+  tasks:
+    - name: Check if nginx or httpd is running
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - nginx
+        - httpd
+      ignore_errors: yes

@@ -1,0 +1,13 @@
+---
+- name: Check Disk Usage
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Check disk usage
+      command: df -h / --output=pcent
+      register: disk_usage
+
+    - name: Fail if disk usage exceeds 80%
+      fail:
+        msg: "Disk usage is too high: {{ disk_usage.stdout_lines[1] }}"
+      when: "disk_usage.stdout_lines[1] | regex_replace('%', '') | int > 80"

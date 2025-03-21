@@ -1,0 +1,16 @@
+---
+- name: Check System Uptime
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Get system uptime
+      command: uptime
+      register: uptime_result
+
+    - name: Save uptime to file
+      local_action:
+        module: copy
+        content: "{{ inventory_hostname }}: {{ uptime_result.stdout }}\n"
+        dest: ./uptime_log.txt
+        mode: '0644'
+      delegate_to: localhost
